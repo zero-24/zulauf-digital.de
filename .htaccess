@@ -1,0 +1,51 @@
+##### Block Access to the GitDeploy configuration
+RedirectMatch 404 /gitdeploy/deploy-config.example.php
+RedirectMatch 404 /gitdeploy/deploy-config.php
+RedirectMatch 404 /gitdeploy/README.md
+
+##### Pagespeed Browser Cache
+<IfModule mod_expires.c>
+	ExpiresActive On
+	<FilesMatch "\.(css|js)$">
+		ExpiresDefault "access 1 month"
+	</FilesMatch>
+	<FilesMatch "\.(jpg|jpeg|gif|png|ico)$">
+		ExpiresDefault "access 6 months"
+	</FilesMatch>
+	<FilesMatch "\.(mp3|flv|pdf|woff|eot|ttf|otf|woff|svg)$">
+		ExpiresDefault "access 1 year"
+	</FilesMatch>
+</IfModule>
+
+##### Pagespeed kompression
+# Deflate Compression by MimeType
+<IfModule mod_deflate.c>
+	<FilesMatch "\.(js|jpg|jpeg|gif|png|css|otf|woff|svg)$">
+		ExpiresActive on
+		ExpiresDefault "access plus 1 month"
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+</IfModule>
+
+##### Pagespeed Cache Header
+<IfModule mod_headers.c>
+    Header set Cache-Control "max-age=31536000"
+</IfModule>
+
+##### HTTP Headers
+<IfModule mod_headers.c>
+	Header set Cross-Origin-Opener-Policy "same-origin"
+    Header set Cross-Origin-Resource-Policy "same-origin"
+    Header set Feature-Policy: "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'"
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "no-referrer"
+	Header set X-XSS-Protection "1; mode=block"
+    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'sha256-JfYgjAb4XZJSe1AUBWfJhRKo9xfSpr5ledAcv2OYL3o='; script-src 'self' 'sha256-RUZy1x3WSPycqSQ1YR6aP0F7ROPiE1wQPlMzqNM2230='; frame-ancestors 'none';"
+</IfModule>
+
+#### Dont allow access to the following files
+RedirectMatch 404 /\.git
+RedirectMatch 404 /\.editorconfig
+RedirectMatch 404 /\.github
+RedirectMatch 404 /\VERSION
